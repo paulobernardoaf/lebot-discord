@@ -48,11 +48,15 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 	let guildChannels = newMember.guild.channels
 	const generalChannel = client.channels.get("510979547781660694")
 	let currentGame = newMember.presence.game
+	let oldGame = oldMember.presence.game
 
 	if(currentGame != null && currentGame.toString() != "Spotify") {
 
 		let userName = newMember.user.toString()
-		generalChannel.send(userName + " está jogando " + currentGame.toString() + ", desejemos boa sorte!")
+
+		if(oldGame != currentGame) {
+			generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
+		}
 
 		if(currentGame.toString() === "Black Desert Online") {
 			generalChannel.send("Bom grind " + userName + "!!")
