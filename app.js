@@ -55,13 +55,21 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 		let userName = newMember.user.toString()
 
 		if(oldGame != currentGame) {
-			if(currentGame.toString() === "League of Legends") {
-				generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
+
+			if(oldGame != null) {
+				if(oldGame.toString() != currentGame.toString()) {
+					if(currentGame.toString() === "League of Legends") {
+						generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
+					}
+
+					if(currentGame.toString() === "Black Desert Online") {
+						generalChannel.send("Bom grind " + userName + "!!")
+					}
+				}
 			}
 
-			if(currentGame.toString() === "Black Desert Online") {
-				generalChannel.send("Bom grind " + userName + "!!")
-			}
+
+			
 		}
 	}
 
