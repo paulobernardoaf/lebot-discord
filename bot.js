@@ -82,7 +82,7 @@ function processCommand(recievedMessage) {
 	if(primaryCommand === "ola") {
 		const userAvatar = new Discord.RichEmbed().setImage(recievedMessage.author.avatarURL).setColor('275BF0')
 		recievedMessage.channel.send("Olá " + recievedMessage.author.toString())
-		recievedMessage.channel.send("Está jogando: " + recievedMessage.author.presence.game === null ? "Nada" : recievedMessage.author.presence.game.toString())
+		recievedMessage.channel.send("Está jogando: " + (recievedMessage.author.presence.game === null ? "Nada" : recievedMessage.author.presence.game))
 
 		if(recievedMessage.author.presence.game != null) {
 			if(recievedMessage.author.presence.game.toString() === "Spotify") {
