@@ -56,7 +56,6 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
 			if(oldGame == null) {
 
-					if(oldGame.toString() != currentGame.toString()) {
 						if(currentGame.toString() === "League of Legends") {
 							generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
 						}
@@ -64,7 +63,6 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 						if(currentGame.toString() === "Black Desert Online") {
 							generalChannel.send("Bom grind " + userName + "!!")
 						}
-					}
 				}
 			
 	}
