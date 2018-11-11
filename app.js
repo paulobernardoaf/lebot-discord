@@ -54,7 +54,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
 		let userName = newMember.user.toString()
 
-		if(oldGame != currentGame) {
+		if(oldGame.name != currentGame.name) {
 
 			if(oldGame != null) {
 				if(oldGame.toString() != currentGame.toString()) {
