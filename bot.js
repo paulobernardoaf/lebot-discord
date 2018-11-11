@@ -84,8 +84,10 @@ function processCommand(recievedMessage) {
 		recievedMessage.channel.send("Olá " + recievedMessage.author.toString())
 		recievedMessage.channel.send("Estás jogando: " + recievedMessage.author.presence.game)
 
-		if(recievedMessage.author.presence.game.toString() === "Spotify") {
-			recievedMessage.channel.send("Boa música estás a ouvir!")
+		if(recievedMessage.author.presence.game != null) {
+			if(recievedMessage.author.presence.game.toString() === "Spotify") {
+				recievedMessage.channel.send("Boa música estás a ouvir!")
+			}
 		}
 	}
 
