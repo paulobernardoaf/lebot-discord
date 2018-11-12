@@ -194,6 +194,18 @@ function processCommand(recievedMessage) {
 		})
 	}
 
+	if(primaryCommand === "sim") {
+		recievedMessage.channel.send("Vou sim, obrigado." {
+			tts: true
+		})
+	}
+
+	if(primaryCommand === "simnao") {
+		recievedMessage.channel.send("AAAAAAAAAAAA", {
+			tts: true
+		})
+	}
+
 }
 
 function getElo(elo) {
