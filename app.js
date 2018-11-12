@@ -188,6 +188,12 @@ function processCommand(recievedMessage) {
 
 	}
 
+	if(primaryCommand === "nao") {
+		recievedMessage.channel.send("Vou não, beijos.", {
+			tts: true
+		})
+	}
+
 }
 
 function getElo(elo) {
