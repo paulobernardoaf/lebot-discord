@@ -165,7 +165,7 @@ function processCommand(recievedMessage) {
 						.addField("Derrotas:", summonerRank[0].losses)
 						.addField("Taxa de vitória:", ((summonerRank[0].wins/(summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
 						.addBlankField()
-						.addField((summonerRank[0].queueType === "RANKED_FLEX_SR" ? " **__FLEX stats:__**" : " **__SOLO/DUO stats:__**"), "Not ranked")
+						.addField((summonerRank[0].queueType === "RANKED_SOLO_5x5" ? " **__FLEX stats:__**" : " **__SOLO/DUO stats:__**"), "Not ranked")
 						.addBlankField() 
 						.addField("Perfil OP.GG:", profileURL)
 						)
