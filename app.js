@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 const request = require('request')
 const urlencode = require('urlencode')
-const lol_api = "RGAPI-a10538d1-fea8-4cbd-8204-5f323b6277de"
+const lol_api = "RGAPI-d84afd86-32d9-4d53-b3fe-75942804557a"
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
