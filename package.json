@@ -5,12 +5,16 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node app.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.4.2",
+    "genius-api": "^0.4.1",
+    "iconv-lite": "^0.4.24",
+    "lyric-get": "^1.0.3",
+    "musixmatch-node": "^1.0.2",
     "nodemon": "^1.18.6",
     "now": "^12.0.1",
     "request": "^2.88.0",

@@ -4,7 +4,9 @@ const request = require('request')
 const urlencode = require('urlencode')
 const lol_api = "RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505"
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
+const Musixmatch = require("musixmatch-node");
+const mxm = new Musixmatch("dea93d6b48ae4bf1c3281efcf791b7e9")
+var l = require('lyric-get')
 
 const urlchampid = "https://br1.api.riotgames.com/lol/static-data/v3/champions?locale=en_US&dataById=false&api_key=" + lol_api;
 const urlitems = "https://br1.api.riotgames.com/lol/static-data/v3/items?locale=en_US&api_key=" + lol_api;
@@ -26,7 +28,7 @@ client.on('ready', () => {
         guild.channels.forEach((channel) => {
             console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
         })
-    })
+	})
 
 })
 
@@ -86,6 +88,36 @@ function processCommand(recievedMessage) {
 
 	console.log("Commands recieved: " + primaryCommand)
 	console.log("Arguments: " + arguments)
+
+	if(primaryCommand === "lyrics") {
+		
+		if( recievedMessage.author.presence.game != null) {
+			
+			if(recievedMessage.author.presence.game.toString() === "Spotify") {
+			let q_track = recievedMessage.author.presence.game.details.toString();
+			let q_artist = recievedMessage.author.presence.game.state.toString()
+
+			l.get(q_artist, q_track, function(err, res){
+				if(err){
+					console.log("DEU MERDA " + err);
+					recievedMessage.channel.send("Letras não encontradas.")
+				}
+				else{
+					console.log(res);
+					recievedMessage.channel.send(new Discord.RichEmbed()
+					.setColor('275BF0')
+					.setTitle(q_track)
+					.addField("Letra:", res)
+					)
+				}
+			});
+			
+			console.log(recievedMessage.author.presence.game);
+			}	
+		}
+		
+
+	}
 
 	if(primaryCommand === "ola") {
 		const userAvatar = new Discord.RichEmbed().setImage(recievedMessage.author.avatarURL).setColor('275BF0')
