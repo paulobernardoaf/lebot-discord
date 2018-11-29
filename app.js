@@ -90,13 +90,6 @@ function processCommand(recievedMessage) {
 	console.log("Arguments: " + arguments)
 
 	if(primaryCommand === "lyrics") {
-
-		if (arguments.length() > 0) {
-
-			recievedMessage.channel.send(arguments)
-
-		}
-
 		
 		if( recievedMessage.author.presence.game != null) {
 			
