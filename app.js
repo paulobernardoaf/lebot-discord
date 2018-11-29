@@ -111,10 +111,7 @@ function processCommand(recievedMessage) {
 				}
 				else{
 					console.log(res);
-					recievedMessage.channel.send(new Discord.RichEmbed()
-					.setColor('275BF0')
-					.setTitle(q_track)
-					.addField("Letra:", res)
+					recievedMessage.channel.send(res)
 					)
 				}
 			});
