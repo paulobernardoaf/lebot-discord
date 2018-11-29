@@ -112,7 +112,6 @@ function processCommand(recievedMessage) {
 				else{
 					console.log(res);
 					recievedMessage.channel.send(res)
-					)
 				}
 			});
 			
