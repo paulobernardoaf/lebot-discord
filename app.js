@@ -85,13 +85,33 @@ function processCommand(recievedMessage) {
 	let splitCommand = fullCommand.split(" ")
 	let primaryCommand = splitCommand[0]
 	let arguments = splitCommand.slice(1)
+	arguments = arguments.join(" ")
+	arguments = arguments.split("|")
+
 
 	console.log("Commands recieved: " + primaryCommand)
-	console.log("Arguments: " + arguments)
-
+	console.log("Arguments: " + arguments[0])
+	
 	if(primaryCommand === "lyrics") {
+
+		if (arguments[0] != null && arguments[0].length > 0 && arguments[1] != null && arguments[1].length > 0) {
+	
+			let q_track = arguments[0];
+			let q_artist = arguments[1];
+			l.get(q_artist, q_track, function(err, res){
+				if(err){
+					console.log("DEU MERDA " + err);
+					recievedMessage.channel.send("Letras não encontradas.")
+				}
+				else{
+					//console.log(res);
+					recievedMessage.channel.send(res)
+				}
+			});
 		
-		if( recievedMessage.author.presence.game != null) {
+			console.log(recievedMessage.author.presence.game);
+			
+		} else if( recievedMessage.author.presence.game != null) {
 			
 			if(recievedMessage.author.presence.game.toString() === "Spotify") {
 			let q_track = recievedMessage.author.presence.game.details.toString();
@@ -103,7 +123,7 @@ function processCommand(recievedMessage) {
 					recievedMessage.channel.send("Letras não encontradas.")
 				}
 				else{
-					console.log(res);
+					//console.log(res);
 					recievedMessage.channel.send(res)
 				}
 			});
