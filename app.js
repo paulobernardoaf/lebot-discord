@@ -105,7 +105,16 @@ function processCommand(recievedMessage) {
 				}
 				else{
 					//console.log(res);
-					recievedMessage.channel.send(res)
+					if(res.length >= 2000) {
+						
+						let firstPart = res.substr(0, 1999);
+						let secondPart = res.substr(2000, res.length)
+						recievedMessage.channel.send(firstPart);
+						recievedMessage.channel.send(secondPart);
+
+					} else {
+						recievedMessage.channel.send(res)
+					}
 				}
 			});
 		
