@@ -104,7 +104,7 @@ function processCommand(recievedMessage) {
 					recievedMessage.channel.send("Letras não encontradas.")
 				}
 				else{
-					//console.log(res);
+					console.log(res.length);
 					if(res.length >= 2000) {
 						
 						let firstPart = res.substr(0, 1999);
