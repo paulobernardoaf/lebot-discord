@@ -91,6 +91,22 @@ function processCommand(recievedMessage) {
 
 	console.log("Commands recieved: " + primaryCommand)
 	console.log("Arguments: " + arguments[0])
+
+	if(primaryCommand === "song") {
+		if( recievedMessage.author.presence.game != null) {			
+			if(recievedMessage.author.presence.game.toString() === "Spotify") {
+				let q_track = recievedMessage.author.presence.game.details.toString();
+				let q_artist = recievedMessage.author.presence.game.state.toString()
+
+				recievedMessage.channel.send(new Discord.RichEmbed()
+				.setTitle("Sua Música")
+				.setColor('275BF0')
+				.addField("Título:", q_track)
+				.addField("Artista: ", q_artist))
+
+			}
+		}
+	}
 	
 	if(primaryCommand === "lyrics") {
 
@@ -255,7 +271,10 @@ function processCommand(recievedMessage) {
 		})
 	}
 
+	
+
 }
+
 
 function getElo(elo) {
 	if(elo === "BRONZE") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/1-1.png"
