@@ -120,7 +120,9 @@ function processCommand(recievedMessage) {
 		})
 	}
 
-	
+	if(primaryCommand === "qualomelhor?") {
+		recievedMessage.channel.send("Dota >> LoL")
+	}	
 
 	if(primaryCommand === "rola") {
 		recievedMessage.channel.send({
