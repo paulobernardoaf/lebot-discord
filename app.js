@@ -110,7 +110,7 @@ function processCommand(recievedMessage) {
 
 	if(primaryCommand === "gado") {
 		recievedMessage.channel.send("GADO DMAIS", {
-			file: "https://scontent.fmcz2-2.fna.fbcdn.net/v/t1.0-9/20374585_1806550419360289_4384078362836994289_n.jpg?_nc_cat=104&_nc_ht=scontent.fmcz2-2.fna&oh=4e46534c203b846644b7ca636e013860&oe=5CE88B14"
+			file: "https://lh3.googleusercontent.com/ixbzrVbhPeZ4QDgeekgYWmFsrNGwV4VC3UAMys_9Wv7s9A4UFlBiXzcc0ma08psf-j7QRAg=s85"
 		})
 	}
 	
