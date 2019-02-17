@@ -113,6 +113,12 @@ function processCommand(recievedMessage) {
 			file: "https://i.imgur.com/uOypeJW.jpg"
 		})
 	}
+
+	if(primaryCommand === "rola") {
+		recievedMessage.channel.send({
+			file: "https://img.buzzfeed.com/buzzfeed-static/static/2018-05/7/16/enhanced/buzzfeed-prod-web-02/enhanced-14853-1525726352-1.jpg"
+		})
+	}
 	
 	if(primaryCommand === "lyrics") {
 
