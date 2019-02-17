@@ -109,7 +109,7 @@ function processCommand(recievedMessage) {
 	}
 
 	if(primaryCommand === "gado") {
-		recievedMessage.channel.send("GADO DMAIS", {
+		recievedMessage.channel.send({
 			file: "https://i.imgur.com/uOypeJW.jpg"
 		})
 	}
