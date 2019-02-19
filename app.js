@@ -116,7 +116,7 @@ function processCommand(recievedMessage) {
 
 	if(primaryCommand === "abreu") {
 		recievedMessage.channel.send({
-			file: "https://i.imgur.com/FxJi0js.jpg"
+			file: "https://desacocheioemauhumor.files.wordpress.com/2018/01/fb_img_1510829471811.jpg"
 		})
 	}
 
