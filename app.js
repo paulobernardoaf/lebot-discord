@@ -121,7 +121,9 @@ function processCommand(recievedMessage) {
 	}
 
 	if(primaryCommand === "lara") {
-		recievedMessage.channel.send("Feia")
+		recievedMessage.channel.send({
+			file: "https://i.imgur.com/dPLJjey.jpg"
+		})
 	}
 
 	if(primaryCommand === "qualomelhor?") {
