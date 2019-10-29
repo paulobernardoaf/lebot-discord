@@ -8,65 +8,65 @@ const Musixmatch = require("musixmatch-node");
 const mxm = new Musixmatch("dea93d6b48ae4bf1c3281efcf791b7e9")
 var l = require('lyric-get')
 
-const urlchampid = "https://br1.api.riotgames.com/lol/static-data/v3/champions?locale=en_US&dataById=false&api_key=" + lol_api;
-const urlitems = "https://br1.api.riotgames.com/lol/static-data/v3/items?locale=en_US&api_key=" + lol_api;
+const urlchampid = "https://br1.api.riotgames.com/lol/static-data/v4/champions?locale=en_US&dataById=false&api_key=" + lol_api;
+const urlitems = "https://br1.api.riotgames.com/lol/static-data/v4/items?locale=en_US&api_key=" + lol_api;
 const urlitempicture = "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/";
-const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v3/summoners/by-name/";
-const urllivematch = "https://br1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/";
+const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
+const urllivematch = "https://br1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/";
 const urlgetchamp = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
-const urlgetmastery = "https://br1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/";
-const urlgetrank = "https://br1.api.riotgames.com/lol/league/v3/positions/by-summoner/";
+const urlgetmastery = "https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/";
+const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
 client.on('ready', () => {
-    console.log("Connected as " + client.user.tag)
+	console.log("Connected as " + client.user.tag)
 
-    console.log("Servers:")
-    client.guilds.forEach((guild) => {
-        console.log(" - " + guild.name)
+	console.log("Servers:")
+	client.guilds.forEach((guild) => {
+		console.log(" - " + guild.name)
 
-        // List all channels
-        guild.channels.forEach((channel) => {
-            console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
-        })
+		// List all channels
+		guild.channels.forEach((channel) => {
+			console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
+		})
 	})
 
 })
 
 client.on('message', recievedMessage => {
 	//Previne o bot de se auto-responder
-	if(recievedMessage.author == client.user) {
+	if (recievedMessage.author == client.user) {
 		return
 	}
 
-	if(recievedMessage.content.startsWith("!")) {
+	if (recievedMessage.content.startsWith("!")) {
 		processCommand(recievedMessage)
 	}
 
 })
 
 client.on('presenceUpdate', (oldMember, newMember) => {
-	
+
 	//console.log(newMember.presence.game)
 	let guildChannels = newMember.guild.channels
 	const generalChannel = client.channels.get("510979547781660694")
 	let currentGame = newMember.presence.game
 	let oldGame = oldMember.presence.game
 
-	if(currentGame != null && currentGame.toString() != "Spotify") {
+	if (currentGame != null && currentGame.toString() != "Spotify") {
 
 		let userName = newMember.user.toString()
 
-			if(oldGame == null) {
+		if (oldGame == null) {
 
-						// if(currentGame.toString() === "League of Legends") {
-						// 	generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
-						// }
+			// if(currentGame.toString() === "League of Legends") {
+			// 	generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
+			// }
 
-						if(currentGame.toString() === "Black Desert Online") {
-							generalChannel.send("Bom grind " + userName + "!!")
-						}
-				}
-			
+			if (currentGame.toString() === "Black Desert Online") {
+				generalChannel.send("Bom grind " + userName + "!!")
+			}
+		}
+
 	}
 
 })
@@ -92,124 +92,82 @@ function processCommand(recievedMessage) {
 	console.log("Commands recieved: " + primaryCommand)
 	console.log("Arguments: " + arguments[0])
 
-	if(primaryCommand === "song") {
-		if( recievedMessage.author.presence.game != null) {			
-			if(recievedMessage.author.presence.game.toString() === "Spotify") {
+	if (primaryCommand === "song") {
+		if (recievedMessage.author.presence.game != null) {
+			if (recievedMessage.author.presence.game.toString() === "Spotify") {
 				let q_track = recievedMessage.author.presence.game.details.toString();
 				let q_artist = recievedMessage.author.presence.game.state.toString()
 
 				recievedMessage.channel.send(new Discord.RichEmbed()
-				.setTitle("Sua Música")
-				.setColor('275BF0')
-				.addField("Título:", q_track)
-				.addField("Artista: ", q_artist))
+					.setTitle("Sua Música")
+					.setColor('275BF0')
+					.addField("Título:", q_track)
+					.addField("Artista: ", q_artist))
 
 			}
 		}
 	}
 
-	if(primaryCommand === "gado") {
-		recievedMessage.channel.send({
-			file: "https://i.imgur.com/uOypeJW.jpg"
-		})
-	}
-
-	if(primaryCommand === "abreu") {
-		recievedMessage.channel.send({
-			file: "https://desacocheioemauhumor.files.wordpress.com/2018/01/fb_img_1510829471811.jpg"
-		})
-	}
-
-	if(primaryCommand === "lara") {
-		recievedMessage.channel.send({
-			file: "https://i.imgur.com/dPLJjey.jpg"
-		})
-	}
-
-	if(primaryCommand === "qualomelhor?") {
-		recievedMessage.channel.send("Dota >> LoL")
-	}	
-
-	if(primaryCommand === "rola") {
-		recievedMessage.channel.send({
-			file: "https://img.buzzfeed.com/buzzfeed-static/static/2018-05/7/16/enhanced/buzzfeed-prod-web-02/enhanced-14853-1525726352-1.jpg"
-		})
-	}
-	
-	if(primaryCommand === "lyrics") {
+	if (primaryCommand === "lyrics") {
 
 		if (arguments[0] != null && arguments[0].length > 0 && arguments[1] != null && arguments[1].length > 0) {
-	
+
 			let q_track = arguments[0];
 			let q_artist = arguments[1];
-			l.get(q_artist, q_track, function(err, res){
-				if(err){
-					console.log("DEU MERDA " + err);
+			l.get(q_artist, q_track, function (err, res) {
+				if (err) {
+					console.log(err);
 					recievedMessage.channel.send("Letras não encontradas.")
 				}
-				else{
-					
+				else {
+
 					recievedMessage.channel.send(res)
-	
+
 				}
 			});
-		
+
 			console.log(recievedMessage.author.presence.game);
-			
-		} else if( recievedMessage.author.presence.game != null) {
-			
-			if(recievedMessage.author.presence.game.toString() === "Spotify") {
-			let q_track = recievedMessage.author.presence.game.details.toString();
-			let q_artist = recievedMessage.author.presence.game.state.toString()
 
-			l.get(q_artist, q_track, function(err, res){
-				if(err){
-					console.log("DEU MERDA " + err);
-					recievedMessage.channel.send("Letras não encontradas.")
-				}
-				else{
-					//console.log(res);
-					recievedMessage.channel.send(res)
-				}
-			});
-			
-			console.log(recievedMessage.author.presence.game);
-			}	
-		}
-		
+		} else if (recievedMessage.author.presence.game != null) {
 
-	}
+			if (recievedMessage.author.presence.game.toString() === "Spotify") {
+				let q_track = recievedMessage.author.presence.game.details.toString();
+				let q_artist = recievedMessage.author.presence.game.state.toString()
 
-	if(primaryCommand === "ola") {
-		const userAvatar = new Discord.RichEmbed().setImage(recievedMessage.author.avatarURL).setColor('275BF0')
-		recievedMessage.channel.send("Olá " + recievedMessage.author.toString())
-		recievedMessage.channel.send("Está jogando: " + (recievedMessage.author.presence.game === null ? "Nada" : recievedMessage.author.presence.game))
+				l.get(q_artist, q_track, function (err, res) {
+					if (err) {
+						console.log("DEU MERDA " + err);
+						recievedMessage.channel.send("Letras não encontradas.")
+					}
+					else {
+						recievedMessage.channel.send(res)
+					}
+				});
 
-		if(recievedMessage.author.presence.game != null) {
-			if(recievedMessage.author.presence.game.toString() === "Spotify") {
-				recievedMessage.channel.send("Boa música estás a ouvir!")
+				console.log(recievedMessage.author.presence.game);
 			}
 		}
+
+
 	}
 
-	if(primaryCommand === "lol") {
-		
+	if (primaryCommand === "lol") {
+
 
 		const http = new XMLHttpRequest()
 		const url = urlsummonerid.concat(arguments[0], "?api_key=", lol_api)
 		http.open("GET", url);
 		http.send();
 		console.log(url)
-		http.onreadystatechange=(e)=>{
-			if (http.readyState == 4 && http.status == 200){
+		http.onreadystatechange = (e) => {
+			if (http.readyState == 4 && http.status == 200) {
 
-				console.log(http.responseText)
+				// console.log(http.responseText)
 				let summoner = JSON.parse(http.responseText)
 				console.log(summoner)
 
-
 				const xhr = new XMLHttpRequest()
-				const url2 = urlgetrank.concat(summoner.id, "?api_key=", lol_api)
+				const url2 = urlgetleague.concat(summoner.id, "?api_key=", lol_api)
 				xhr.open("GET", url2, false);
 				xhr.send(null);
 				console.log(xhr.responseText)
@@ -221,58 +179,90 @@ function processCommand(recievedMessage) {
 				let cont = Object.keys(summonerRank).length
 				console.log(cont)
 
+				if (cont === 3) {
 
-				if(cont === 2) {
-					
 					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setThumbnail(getElo(summonerRank[0].tier))
+						.setThumbnail(getElo(summonerRank[1].tier))
 						.setTitle(summoner.name)
 						.setColor('275BF0')
 						.addField("Nível de Invocador:", summoner.summonerLevel)
 						.addBlankField()
-						.addField(summonerRank[0].queueType === "RANKED_SOLO_5x5" ? " **__SOLO/DUO stats:__**" : " **__FLEX stats:__**", ".....................................")
+						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
 						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
 						.addField("PDL:", summonerRank[0].leaguePoints)
 						.addField("Vitórias:", summonerRank[0].wins)
 						.addField("Derrotas:", summonerRank[0].losses)
-						.addField("Taxa de vitória:", ((summonerRank[0].wins/(summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
+						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
 						.addBlankField()
-						.addField((summonerRank[1].queueType === "RANKED_FLEX_SR" ? " **__FLEX stats:__**" : " **__SOLO/DUO stats:__**"), ".....................................")
+						.addField(checkRankType(summonerRank[1].queueType), ".....................................")
 						.addField("Elo:", summonerRank[1].tier + " " + summonerRank[1].rank)
 						.addField("PDL:", summonerRank[1].leaguePoints)
 						.addField("Vitórias:", summonerRank[1].wins)
 						.addField("Derrotas:", summonerRank[1].losses)
+						.addField("Taxa de vitória:", ((summonerRank[1].wins / (summonerRank[1].wins + summonerRank[1].losses)) * 100).toFixed(2) + "%")
+						.addBlankField()
+						.addField(checkRankType(summonerRank[2].queueType), ".....................................")
+						.addField("Elo:", summonerRank[2].tier + " " + summonerRank[2].rank)
+						.addField("PDL:", summonerRank[2].leaguePoints)
+						.addField("Vitórias:", summonerRank[2].wins)
+						.addField("Derrotas:", summonerRank[2].losses)
+						.addField("Taxa de vitória:", ((summonerRank[2].wins / (summonerRank[2].wins + summonerRank[2].losses)) * 100).toFixed(2) + "%")
 						.addBlankField()
 						.addField("Perfil OP.GG:", profileURL)
-						)
-				}	else if(cont === 1) {
+					)
+				}
+				else if (cont === 2) {
+
 					recievedMessage.channel.send(new Discord.RichEmbed()
 						.setThumbnail(getElo(summonerRank[0].tier))
 						.setTitle(summoner.name)
 						.setColor('275BF0')
 						.addField("Nível de Invocador:", summoner.summonerLevel)
-						.addField(summonerRank[0].queueType === "RANKED_SOLO_5x5" ? " **__SOLO/DUO stats:__**" : " **__FLEX stats:__**", ".....................................")
+						.addBlankField()
+						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
 						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
 						.addField("PDL:", summonerRank[0].leaguePoints)
 						.addField("Vitórias:", summonerRank[0].wins)
 						.addField("Derrotas:", summonerRank[0].losses)
-						.addField("Taxa de vitória:", ((summonerRank[0].wins/(summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
+						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
 						.addBlankField()
-						.addField((summonerRank[0].queueType === "RANKED_SOLO_5x5" ? " **__FLEX stats:__**" : " **__SOLO/DUO stats:__**"), "Not ranked")
-						.addBlankField() 
+						.addField(checkRankType(summonerRank[1].queueType), ".....................................")
+						.addField("Elo:", summonerRank[1].tier + " " + summonerRank[1].rank)
+						.addField("PDL:", summonerRank[1].leaguePoints)
+						.addField("Vitórias:", summonerRank[1].wins)
+						.addField("Derrotas:", summonerRank[1].losses)
+						.addField("Taxa de vitória:", ((summonerRank[1].wins / (summonerRank[1].wins + summonerRank[1].losses)) * 100).toFixed(2) + "%")
+						.addBlankField()
 						.addField("Perfil OP.GG:", profileURL)
-						)
+					)
+				} else if (cont === 1) {
+					recievedMessage.channel.send(new Discord.RichEmbed()
+						.setThumbnail(getElo(summonerRank[0].tier))
+						.setTitle(summoner.name)
+						.setColor('275BF0')
+						.addField("Nível de Invocador:", summoner.summonerLevel)
+						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
+						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
+						.addField("PDL:", summonerRank[0].leaguePoints)
+						.addField("Vitórias:", summonerRank[0].wins)
+						.addField("Derrotas:", summonerRank[0].losses)
+						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
+						.addBlankField()
+						.addField("Perfil OP.GG:", profileURL)
+					)
 				} else {
 					recievedMessage.channel.send(new Discord.RichEmbed()
 						.setTitle(summoner.name)
 						.setColor('275BF0')
 						.addField("Nível de Invocador:", summoner.summonerLevel)
-						.addField("**__SOLO/DUO stats:__**" , "Not ranked")						
+						.addField("**__SOLO/DUO stats:__**", "Not ranked")
 						.addBlankField()
-						.addField("**__FLEX stats:__**", "Not ranked")	
-						.addBlankField()					
+						.addField("**__FLEX stats:__**", "Not ranked")
+						.addBlankField()
+						.addField("**__TFT stats:__**", "Not ranked")
+						.addBlankField()
 						.addField("Perfil OP.GG:", profileURL)
-						)
+					)
 				}
 			}
 		}
@@ -281,43 +271,38 @@ function processCommand(recievedMessage) {
 
 	}
 
-	if(primaryCommand === "nao") {
-		recievedMessage.channel.send("Vou não, beijos.", {
-			tts: true
-		})
-	}
-
-	if(primaryCommand === "sim") {
-		recievedMessage.channel.send("Vou sim, obrigado.", {
-			tts: true
-		})
-	}
-
-	if(primaryCommand === "simnao") {
-		recievedMessage.channel.send("AAAAAAAAAAAA", {
-			tts: true
-		})
-	}
-
-	
-
 }
 
 
 function getElo(elo) {
-	if(elo === "BRONZE") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/1-1.png"
-	if(elo === "SILVER") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/2-1.png"
-	if(elo === "GOLD") 			return "https://cdn.leagueofgraphs.com/img/league-icons/160/3-1.png"
-	if(elo === "PLATINUM") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/4-1.png"
-	if(elo === "DIAMOND") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/5-1.png"
-	if(elo === "MASTER") 		return "https://cdn.leagueofgraphs.com/img/league-icons/160/6-1.png"
-	if(elo === "CHALLENGER") 	return "https://cdn.leagueofgraphs.com/img/league-icons/160/7-1.png"
+	if (elo === "IRON") return "https://i.imgur.com/YXgY8m5.png"
+	if (elo === "BRONZE") return "https://i.imgur.com/HH7jeVu.png"
+	if (elo === "SILVER") return "https://i.imgur.com/bqiAZQ1.png"
+	if (elo === "GOLD") return "https://i.imgur.com/jpuxCC6.png"
+	if (elo === "PLATINUM") return "https://i.imgur.com/u1RGUs9.png"
+	if (elo === "DIAMOND") return "https://i.imgur.com/t9TLrGl.png"
+	if (elo === "MASTER") return "https://i.imgur.com/YBWbIND.png"
+	if (elo === "GRANDMASTER") return "https://i.imgur.com/1dkHMxD.png"
+	if (elo === "CHALLENGER") return "https://i.imgur.com/c7j9Duw.png"
 }
+
+function checkRankType(type) {
+
+	if (type == "RANKED_SOLO_5x5") {
+		return " **__SOLO/DUO stats:__**"
+	} else if (type === "RANKED_FLEX_SR") {
+		return " **__FLEX stats:__**"
+	} else if (type === "RANKED_TFT") {
+		return "**__TFT stats:__**"
+	}
+}
+
 
 
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = "NTEwOTgwMDY4ODM1ODUyMjg4.DskPWw.nVNsY6SJtJY39mTFMogMK-JTHEE"
+bot_secret_token = process.env.BOT_TOKEN
+console.log(bot_secret_token)
 
 client.login(bot_secret_token)
