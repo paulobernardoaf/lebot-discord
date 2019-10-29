@@ -1,21 +1,11 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const request = require('request')
-const urlencode = require('urlencode')
-const lol_api = "RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505"
+const lol_api = process.env.RAZZLE_LOL_API
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-const Musixmatch = require("musixmatch-node");
-const mxm = new Musixmatch("dea93d6b48ae4bf1c3281efcf791b7e9")
 var l = require('lyric-get')
 
-const urlchampid = "https://br1.api.riotgames.com/lol/static-data/v4/champions?locale=en_US&dataById=false&api_key=" + lol_api;
-const urlitems = "https://br1.api.riotgames.com/lol/static-data/v4/items?locale=en_US&api_key=" + lol_api;
-const urlitempicture = "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/";
+
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
-const urllivematch = "https://br1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/";
-const urlgetchamp = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
-const urlgetmastery = "https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/";
-// const urlgetrank = "https://br1.api.riotgames.com/lol/league/v4/positions/by-summoner/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
 client.on('ready', () => {
