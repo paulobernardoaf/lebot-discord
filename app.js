@@ -302,7 +302,6 @@ function checkRankType(type) {
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = process.env.BOT_TOKEN
-console.log(bot_secret_token)
+bot_secret_token = process.env.RAZZLE_BOT_TOKEN
 
 client.login(bot_secret_token)
