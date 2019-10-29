@@ -15,6 +15,7 @@ const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/b
 const urllivematch = "https://br1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/";
 const urlgetchamp = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
 const urlgetmastery = "https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/";
+// const urlgetrank = "https://br1.api.riotgames.com/lol/league/v4/positions/by-summoner/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
 client.on('ready', () => {
@@ -178,11 +179,12 @@ function processCommand(recievedMessage) {
 
 				let cont = Object.keys(summonerRank).length
 				console.log(cont)
+				console.log("ATE AQUI DEU BOM")
 
 				if (cont === 3) {
 
 					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setThumbnail(getElo(summonerRank[1].tier))
+						.setThumbnail(getElo(summonerRank[0].tier))
 						.setTitle(summoner.name)
 						.setColor('275BF0')
 						.addField("Nível de Invocador:", summoner.summonerLevel)
@@ -302,6 +304,6 @@ function checkRankType(type) {
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = "NTEwOTgwMDY4ODM1ODUyMjg4.DskPWw.nVNsY6SJtJY39mTFMogMK-JTHEE"
+bot_secret_token = process.env.RAZZLE_BOT_TOKEN
 
 client.login(bot_secret_token)
