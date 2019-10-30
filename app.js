@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const lol_api = process.env.RAZZLE_LOL_API
+// const lol_api = process.env.RAZZLE_LOL_API
+const lol_api = "RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505"
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
@@ -36,32 +37,6 @@ client.on('message', recievedMessage => {
 
 })
 
-client.on('presenceUpdate', (oldMember, newMember) => {
-
-	//console.log(newMember.presence.game)
-	let guildChannels = newMember.guild.channels
-	const generalChannel = client.channels.get("510979547781660694")
-	let currentGame = newMember.presence.game
-	let oldGame = oldMember.presence.game
-
-	if (currentGame != null && currentGame.toString() != "Spotify") {
-
-		let userName = newMember.user.toString()
-
-		if (oldGame == null) {
-
-			// if(currentGame.toString() === "League of Legends") {
-			// 	generalChannel.send(userName + " está jogando " + currentGame.toString() + ", rumo ao Ferro V!")
-			// }
-
-			if (currentGame.toString() === "Black Desert Online") {
-				generalChannel.send("Bom grind " + userName + "!!")
-			}
-		}
-
-	}
-
-})
 
 client.on("guildMemberAdd", member => {
 	const generalChannel = client.channels.get("510979547781660694")
@@ -144,6 +119,9 @@ function processCommand(recievedMessage) {
 	}
 
 	if (primaryCommand === "lol") {
+
+		arguments[0] = arguments[0].split(' ').join('_')
+		console.log("Argumentos LOL:" + arguments[0])
 
 
 		const http = new XMLHttpRequest()
@@ -256,6 +234,9 @@ function processCommand(recievedMessage) {
 						.addField("Perfil OP.GG:", profileURL)
 					)
 				}
+			} else if(http.readyState == 4 && http.status == 404){
+				recievedMessage.channel.send("O usuário não existe.")
+				console.log("FAIL")
 			}
 		}
 
@@ -294,6 +275,7 @@ function checkRankType(type) {
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = process.env.RAZZLE_BOT_TOKEN
+// bot_secret_token = process.env.RAZZLE_BOT_TOKEN
+bot_secret_token = "NTEwOTgwMDY4ODM1ODUyMjg4.XbhMCw.PAOU3D98OtmS4b6QnxLFOnHo4Zo"
 
 client.login(bot_secret_token)
