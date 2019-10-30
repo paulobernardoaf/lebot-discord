@@ -4,8 +4,6 @@ const lol_api = process.env.RAZZLE_LOL_API
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
-
-
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
@@ -147,7 +145,6 @@ function processCommand(recievedMessage) {
 
 				let cont = Object.keys(summonerRank).length
 				console.log(cont)
-				console.log("ATE AQUI DEU BOM")
 
 				if (cont === 3) {
 
