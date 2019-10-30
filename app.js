@@ -205,8 +205,6 @@ function processCommand(recievedMessage) {
 					)
 				}
 				else if (cont === 2) {
-					let a, b
-					a = b = 0
 					recievedMessage.channel.send(new Discord.RichEmbed()
 						.setThumbnail(getElo(summonerRank[0].tier))
 						.setTitle(summoner.name)
