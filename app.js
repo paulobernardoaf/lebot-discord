@@ -141,7 +141,7 @@ function processCommand(recievedMessage) {
 				let summonerRank = JSON.parse(xhr.responseText)
 				console.log(summonerRank)
 
-				const profileURL = "http://br.op.gg/summoner/userName=".concat(summoner.name)
+				const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
 
 				let cont = Object.keys(summonerRank).length
 				console.log(cont)
