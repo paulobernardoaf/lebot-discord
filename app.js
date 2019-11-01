@@ -7,6 +7,8 @@ var l = require('lyric-get')
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
+const tier = ['NONE', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
+
 client.on('ready', () => {
 	console.log("Connected as " + client.user.tag)
 
@@ -131,119 +133,72 @@ function processCommand(recievedMessage) {
 
 				// console.log(http.responseText)
 				let summoner = JSON.parse(http.responseText)
-				console.log(summoner)
+				// console.log(summoner)
 
 				const xhr = new XMLHttpRequest()
 				const url2 = urlgetleague.concat(summoner.id, "?api_key=", lol_api)
 				xhr.open("GET", url2, false);
 				xhr.send(null);
-				console.log(xhr.responseText)
+				// console.log(xhr.responseText)
 				let summonerRank = JSON.parse(xhr.responseText)
 				console.log(summonerRank)
 
 				const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
 
-				let cont = Object.keys(summonerRank).length
-				console.log(cont)
+				let tierMax = 0;
+				const message = new Discord.RichEmbed()
+									.setTitle(summoner.name)
+									.setColor('275BF0')
+									.addField("Nível de Invocador:", summoner.summonerLevel)
+									.addBlankField();
+									
 
-				if (cont === 3) {
+				summonerRank.forEach(summoner => {
+					if (checkRankType(summoner.queueType) === undefined) return;
 
-					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setThumbnail(getElo(summonerRank[0].tier))
-						.setTitle(summoner.name)
-						.setColor('275BF0')
-						.addField("Nível de Invocador:", summoner.summonerLevel)
+					message
+						.addField(checkRankType(summoner.queueType), ".....................................")
+						.addField("Elo:", summoner.tier + " " + summoner.rank)
+						.addField("PDL:", summoner.leaguePoints)
+						.addField("Vitórias:", summoner.wins)
+						.addField("Derrotas:", summoner.losses)
+						.addField("Taxa de vitória:", ((summoner.wins / (summoner.wins + summoner.losses)) * 100).toFixed(2) + "%")
 						.addBlankField()
-						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
-						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
-						.addField("PDL:", summonerRank[0].leaguePoints)
-						.addField("Vitórias:", summonerRank[0].wins)
-						.addField("Derrotas:", summonerRank[0].losses)
-						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField(checkRankType(summonerRank[1].queueType), ".....................................")
-						.addField("Elo:", summonerRank[1].tier + " " + summonerRank[1].rank)
-						.addField("PDL:", summonerRank[1].leaguePoints)
-						.addField("Vitórias:", summonerRank[1].wins)
-						.addField("Derrotas:", summonerRank[1].losses)
-						.addField("Taxa de vitória:", ((summonerRank[1].wins / (summonerRank[1].wins + summonerRank[1].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField(checkRankType(summonerRank[2].queueType), ".....................................")
-						.addField("Elo:", summonerRank[2].tier + " " + summonerRank[2].rank)
-						.addField("PDL:", summonerRank[2].leaguePoints)
-						.addField("Vitórias:", summonerRank[2].wins)
-						.addField("Derrotas:", summonerRank[2].losses)
-						.addField("Taxa de vitória:", ((summonerRank[2].wins / (summonerRank[2].wins + summonerRank[2].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField("Perfil OP.GG:", profileURL)
-					)
-				}
-				else if (cont === 2) {
-					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setThumbnail(getElo(summonerRank[0].tier))
-						.setTitle(summoner.name)
-						.setColor('275BF0')
-						.addField("Nível de Invocador:", summoner.summonerLevel)
-						.addBlankField()
-						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
-						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
-						.addField("PDL:", summonerRank[0].leaguePoints)
-						.addField("Vitórias:", summonerRank[0].wins)
-						.addField("Derrotas:", summonerRank[0].losses)
-						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField(checkRankType(summonerRank[1].queueType), ".....................................")
-						.addField("Elo:", summonerRank[1].tier + " " + summonerRank[1].rank)
-						.addField("PDL:", summonerRank[1].leaguePoints)
-						.addField("Vitórias:", summonerRank[1].wins)
-						.addField("Derrotas:", summonerRank[1].losses)
-						.addField("Taxa de vitória:", ((summonerRank[1].wins / (summonerRank[1].wins + summonerRank[1].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField("Perfil OP.GG:", profileURL)
-					)
-				} else if (cont === 1) {
-					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setThumbnail(getElo(summonerRank[0].tier))
-						.setTitle(summoner.name)
-						.setColor('275BF0')
-						.addField("Nível de Invocador:", summoner.summonerLevel)
-						.addField(checkRankType(summonerRank[0].queueType), ".....................................")
-						.addField("Elo:", summonerRank[0].tier + " " + summonerRank[0].rank)
-						.addField("PDL:", summonerRank[0].leaguePoints)
-						.addField("Vitórias:", summonerRank[0].wins)
-						.addField("Derrotas:", summonerRank[0].losses)
-						.addField("Taxa de vitória:", ((summonerRank[0].wins / (summonerRank[0].wins + summonerRank[0].losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
-						.addField("Perfil OP.GG:", profileURL)
-					)
-				} else {
-					recievedMessage.channel.send(new Discord.RichEmbed()
-						.setTitle(summoner.name)
-						.setColor('275BF0')
-						.addField("Nível de Invocador:", summoner.summonerLevel)
+
+					let auxTier = tier.indexOf(summoner.tier);
+					if (auxTier > tierMax) {
+						tierMax = auxTier
+					}
+				});
+
+				if (Object.keys(summonerRank).length === 0) {
+					message
 						.addField("**__SOLO/DUO stats:__**", "Not ranked")
 						.addBlankField()
 						.addField("**__FLEX stats:__**", "Not ranked")
 						.addBlankField()
 						.addField("**__TFT stats:__**", "Not ranked")
 						.addBlankField()
-						.addField("Perfil OP.GG:", profileURL)
-					)
 				}
+
+				message
+					.addField("Perfil OP.GG:", profileURL)
+					.setThumbnail(getElo(tier[tierMax]));
+
+				recievedMessage.channel.send(message)
+
 			} else if(http.readyState == 4 && http.status == 404){
 				recievedMessage.channel.send("O usuário não existe.")
 				console.log("FAIL")
 			}
 		}
 
-
-
 	}
 
 }
 
-
 function getElo(elo) {
+	if (elo === "NONE") return "https://www.ankaeloboost.com/files/images/lol_divisions/0.png"
 	if (elo === "IRON") return "https://i.imgur.com/YXgY8m5.png"
 	if (elo === "BRONZE") return "https://i.imgur.com/HH7jeVu.png"
 	if (elo === "SILVER") return "https://i.imgur.com/bqiAZQ1.png"
