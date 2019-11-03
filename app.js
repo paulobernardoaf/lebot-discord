@@ -1,13 +1,12 @@
 const Discord = require('discord.js')
+const Canvas = require('canvas')
 const client = new Discord.Client()
-const lol_api = process.env.RAZZLE_LOL_API
+const lol_api = 'RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505'
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
-
-const tier = ['NONE', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
 
 client.on('ready', () => {
 	console.log("Connected as " + client.user.tag)
@@ -36,7 +35,6 @@ client.on('message', recievedMessage => {
 
 })
 
-
 client.on("guildMemberAdd", member => {
 	const generalChannel = client.channels.get("510979547781660694")
 
@@ -44,8 +42,7 @@ client.on("guildMemberAdd", member => {
 
 })
 
-
-function processCommand(recievedMessage) {
+async function processCommand(recievedMessage) {
 
 	let fullCommand = recievedMessage.content.substr(1)
 	let splitCommand = fullCommand.split(" ")
@@ -119,78 +116,134 @@ function processCommand(recievedMessage) {
 
 	if (primaryCommand === "lol") {
 
-		arguments[0] = arguments[0].split(' ').join('_')
-		console.log("Argumentos LOL:" + arguments[0])
+		// const tier = ['UNRANKED', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
+		const rankType = ['RANKED_SOLO_5x5', 'RANKED_TFT', 'RANKED_FLEX_SR'];
 
+		arguments[0] = arguments[0].split(' ').join('_')
 
 		const http = new XMLHttpRequest()
 		const url = urlsummonerid.concat(arguments[0], "?api_key=", lol_api)
 		http.open("GET", url);
 		http.send();
-		console.log(url)
-		http.onreadystatechange = (e) => {
+
+		// Canvas
+		const canvas = Canvas.createCanvas(744,412)
+		const ctx = canvas.getContext('2d')
+		
+		http.onreadystatechange = async (e) => {
 			if (http.readyState == 4 && http.status == 200) {
 
-				// console.log(http.responseText)
 				let summoner = JSON.parse(http.responseText)
-				// console.log(summoner)
 
 				const xhr = new XMLHttpRequest()
 				const url2 = urlgetleague.concat(summoner.id, "?api_key=", lol_api)
 				xhr.open("GET", url2, false);
 				xhr.send(null);
-				// console.log(xhr.responseText)
+
 				let summonerRank = JSON.parse(xhr.responseText)
-				console.log(summonerRank)
+
+				const rankDefault = {
+					'queueType': '',
+					'tier': 'UNRANKED',
+				};
+
+				var filteredRank = [];
+				rankType.forEach(rank => {
+					rankDefault.queueType = rank;
+
+					// POG
+					filteredRank.push(
+						Object.assign(JSON.parse(JSON.stringify(rankDefault)),
+						summonerRank.filter((obj) => {return obj.queueType == rank})[0])
+					);
+				});
 
 				const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
 
-				let tierMax = 0;
-				const message = new Discord.RichEmbed()
-									.setTitle(summoner.name)
-									.setColor('275BF0')
-									.addField("Nível de Invocador:", summoner.summonerLevel)
-									.addBlankField();
-									
+				const background = await Canvas.loadImage('./images/background.jpg');
+				ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-				summonerRank.forEach(summoner => {
-					if (checkRankType(summoner.queueType) === undefined) return;
+				// Rectangle - opacity 70%
+				ctx.globalAlpha = 0.7;
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				ctx.globalAlpha = 1.0;
 
-					message
-						.addField(checkRankType(summoner.queueType), ".....................................")
-						.addField("Elo:", summoner.tier + " " + summoner.rank)
-						.addField("PDL:", summoner.leaguePoints)
-						.addField("Vitórias:", summoner.wins)
-						.addField("Derrotas:", summoner.losses)
-						.addField("Taxa de vitória:", ((summoner.wins / (summoner.wins + summoner.losses)) * 100).toFixed(2) + "%")
-						.addBlankField()
+				// Name
+				ctx.font = '28px sans-serif';
+				ctx.fillStyle = '#f0e6d2';
+				ctx.fillText(summoner.name, 20, 38);
 
-					let auxTier = tier.indexOf(summoner.tier);
-					if (auxTier > tierMax) {
-						tierMax = auxTier
+				// Level
+				ctx.font = '16px sans-serif';
+				ctx.fillStyle = '#8c897d';
+				ctx.fillText("Nível: " + summoner.summonerLevel, 20, 60);
+
+				// Ranks
+				var imageRank;
+				var x = 60, y = 100;
+
+				ctx.textBaseline="middle";
+				ctx.textAlign="center";
+
+				// // Middle lines
+				// var grd = ctx.createLinearGradient(0, y + 85, canvas.width, y + 85);
+				// grd.addColorStop(0,"#000000");
+				// grd.addColorStop(0.5,"#60491f");
+				// grd.addColorStop(1,"#000000");
+				// ctx.fillStyle = grd;
+				// ctx.fillRect(0, y + 85, canvas.width, 3);
+				// ctx.fillRect(x, y + 105, canvas.width - x, 2);
+
+				for (let i = 0; i < filteredRank.length; i++) {
+
+					const element = filteredRank[i];
+					
+					// Elo
+					imageRank = await Canvas.loadImage(getElo(element.tier));
+					ctx.drawImage(imageRank, x, y, 170, 170);
+					
+					ctx.font = '22px Verdana';
+					ctx.fillStyle = '#8c897d';
+					ctx.fillText(getRankName(element.queueType), x + 85, y + 195);
+
+					if (element.tier != 'UNRANKED') {
+
+						ctx.font = '18px sans-serif';
+						ctx.fillStyle = '#f0e6d2';
+						ctx.fillText(`${element.tier} ${element.rank}`, x + 85, y + 220);
+
+						grd = ctx.createLinearGradient(x, y + 235, x + 150, y + 235);
+						grd.addColorStop(0,"#000000");
+						grd.addColorStop(0.5,"#60491f");
+						grd.addColorStop(1,"#000000");
+						ctx.fillStyle = grd;
+						ctx.fillRect(x, y + 235, 150, 3);
+						
+
+						ctx.font = '16px Verdana';
+						ctx.fillStyle = '#8c897d';
+						ctx.fillText(`${element.wins} VITÓRIA(S) ${element.leaguePoints} PDL`, x + 85, y + 250);
 					}
-				});
+					else {
 
-				if (Object.keys(summonerRank).length === 0) {
-					message
-						.addField("**__SOLO/DUO stats:__**", "Not ranked")
-						.addBlankField()
-						.addField("**__FLEX stats:__**", "Not ranked")
-						.addBlankField()
-						.addField("**__TFT stats:__**", "Not ranked")
-						.addBlankField()
+						ctx.font = '18px sans-serif';
+						ctx.fillStyle = '#8c897d';
+						ctx.fillText('Não Ranqueado', x + 85, y + 220);
+
+					}
+					
+					x += 240;
 				}
+				
+				// Use helpful Attachment class structure to process the file for you
+				const attachment = new Discord.Attachment(canvas.toBuffer(), 'lol-elo.png');
 
-				message
-					.addField("Perfil OP.GG:", profileURL)
-					.setThumbnail(getElo(tier[tierMax]));
-
-				recievedMessage.channel.send(message)
+				recievedMessage.channel.send(attachment);
 
 			} else if(http.readyState == 4 && http.status == 404){
 				recievedMessage.channel.send("O usuário não existe.")
-				console.log("FAIL")
 			}
+
 		}
 
 	}
@@ -198,34 +251,22 @@ function processCommand(recievedMessage) {
 }
 
 function getElo(elo) {
-	if (elo === "NONE") return "https://www.ankaeloboost.com/files/images/lol_divisions/0.png"
-	if (elo === "IRON") return "https://i.imgur.com/YXgY8m5.png"
-	if (elo === "BRONZE") return "https://i.imgur.com/HH7jeVu.png"
-	if (elo === "SILVER") return "https://i.imgur.com/bqiAZQ1.png"
-	if (elo === "GOLD") return "https://i.imgur.com/jpuxCC6.png"
-	if (elo === "PLATINUM") return "https://i.imgur.com/u1RGUs9.png"
-	if (elo === "DIAMOND") return "https://i.imgur.com/t9TLrGl.png"
-	if (elo === "MASTER") return "https://i.imgur.com/YBWbIND.png"
-	if (elo === "GRANDMASTER") return "https://i.imgur.com/1dkHMxD.png"
-	if (elo === "CHALLENGER") return "https://i.imgur.com/c7j9Duw.png"
+	return `./images/${elo}.png`;
 }
 
-function checkRankType(type) {
-
+function getRankName(type) {
 	if (type == "RANKED_SOLO_5x5") {
-		return " **__SOLO/DUO stats:__**"
+		return "SOLO/DUO"
 	} else if (type === "RANKED_FLEX_SR") {
-		return " **__FLEX stats:__**"
+		return "FLEX 5V5"
 	} else if (type === "RANKED_TFT") {
-		return "**__TFT stats:__**"
+		return "TFT"
 	}
 }
-
-
 
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = process.env.RAZZLE_BOT_TOKEN
+bot_secret_token = 'NTEwOTgwMDY4ODM1ODUyMjg4.XbnXzQ.Jtq2vTnpxqRDzSf__yo3W88C60Y'
 
 client.login(bot_secret_token)
