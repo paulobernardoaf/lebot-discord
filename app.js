@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const Canvas = require('canvas')
 const client = new Discord.Client()
-const lol_api = process.env.RAZZLE_LOL_API
+const lol_api = 'RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505'//process.env.RAZZLE_LOL_API
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
@@ -116,7 +116,6 @@ async function processCommand(recievedMessage) {
 
 	if (primaryCommand === "lol") {
 
-		// const tier = ['UNRANKED', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
 		const rankType = ['RANKED_SOLO_5x5', 'RANKED_TFT', 'RANKED_FLEX_SR'];
 
 		arguments[0] = arguments[0].split(' ').join('_')
@@ -128,6 +127,7 @@ async function processCommand(recievedMessage) {
 
 		// Canvas
 		const canvas = Canvas.createCanvas(744,412)
+		// const canvas = Canvas.createCanvas(1000,412) // 4 ranks
 		const ctx = canvas.getContext('2d')
 		
 		http.onreadystatechange = async (e) => {
@@ -141,24 +141,23 @@ async function processCommand(recievedMessage) {
 				xhr.send(null);
 
 				let summonerRank = JSON.parse(xhr.responseText)
-
-				const rankDefault = {
-					'queueType': '',
-					'tier': 'UNRANKED',
-				};
+				// console.log(summonerRank)
 
 				var filteredRank = [];
 				rankType.forEach(rank => {
-					rankDefault.queueType = rank;
-
-					// POG
 					filteredRank.push(
-						Object.assign(JSON.parse(JSON.stringify(rankDefault)),
-						summonerRank.filter((obj) => {return obj.queueType == rank})[0])
+						Object.assign({
+							'queueType': rank,
+							'tier': 'UNRANKED',
+							},
+							summonerRank.filter((obj) => {
+								return obj.queueType == rank
+							})[0]
+						)
 					);
 				});
 
-				const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
+				// const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
 
 				const background = await Canvas.loadImage('./images/background.jpg');
 				ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -235,6 +234,10 @@ async function processCommand(recievedMessage) {
 					x += 240;
 				}
 				
+				ctx.font = '14px sans-serif';
+				ctx.fillStyle = '#f0e6d2';
+				ctx.fillText('@LeBot', canvas.width - 50, 30);
+
 				// Use helpful Attachment class structure to process the file for you
 				const attachment = new Discord.Attachment(canvas.toBuffer(), 'lol-elo.png');
 
@@ -261,12 +264,14 @@ function getRankName(type) {
 		return "FLEX 5V5"
 	} else if (type === "RANKED_TFT") {
 		return "TFT"
+	} else if(type === "RANKED_FLEX_TT") {
+		return "FLEX 3V3"
 	}
 }
 
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = process.env.RAZZLE_BOT_TOKEN
+bot_secret_token = 'NTEwOTgwMDY4ODM1ODUyMjg4.Xb4-ew.N10Ly0sn6PW590JUFhWgsBD4I2I'//process.env.RAZZLE_BOT_TOKEN
 
 client.login(bot_secret_token)
