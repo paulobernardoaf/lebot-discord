@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const Canvas = require('canvas')
 const client = new Discord.Client()
-const lol_api = 'RGAPI-bf1d79c7-0772-4505-8652-9860d0f60505'//process.env.RAZZLE_LOL_API
+const lol_api = process.env.RAZZLE_LOL_API
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
@@ -127,7 +127,7 @@ async function processCommand(recievedMessage) {
 
 		// Canvas
 		const canvas = Canvas.createCanvas(744,412)
-		// const canvas = Canvas.createCanvas(1000,412) // 4 ranks
+		// const canvas = Canvas.createCanvas(1000,412) // show 4 ranks
 		const ctx = canvas.getContext('2d')
 		
 		http.onreadystatechange = async (e) => {
@@ -272,6 +272,6 @@ function getRankName(type) {
 // Get your bot's secret token from:
 // https://discordapp.com/developers/applications/
 // Click on your application -> Bot -> Token -> "Click to Reveal Token"
-bot_secret_token = 'NTEwOTgwMDY4ODM1ODUyMjg4.Xb4-ew.N10Ly0sn6PW590JUFhWgsBD4I2I'//process.env.RAZZLE_BOT_TOKEN
+bot_secret_token = process.env.RAZZLE_BOT_TOKEN
 
 client.login(bot_secret_token)
