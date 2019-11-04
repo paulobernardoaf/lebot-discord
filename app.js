@@ -1,12 +1,15 @@
+require('dotenv').config()
 const Discord = require('discord.js')
 const Canvas = require('canvas')
 const client = new Discord.Client()
 const lol_api = process.env.RAZZLE_LOL_API
+const steam_api = "9CEB780BCBAFCDD544E73E73EB2552C4"
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
+const urlopendota = "https://api.opendota.com/api/"
 
 client.on('ready', () => {
 	console.log("Connected as " + client.user.tag)
@@ -249,6 +252,12 @@ async function processCommand(recievedMessage) {
 
 		}
 
+	}
+
+	if(primaryCommand === "dota") {
+
+
+	
 	}
 
 }
