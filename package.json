@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bignumber": "^1.1.0",
     "canvas": "^2.6.0",
     "discord.js": "^11.4.2",
     "dotenv": "^8.2.0",

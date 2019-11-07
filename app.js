@@ -1,15 +1,17 @@
 require('dotenv').config()
+const bignumber = require("bignumber.js");
 const Discord = require('discord.js')
 const Canvas = require('canvas')
 const client = new Discord.Client()
 const lol_api = process.env.RAZZLE_LOL_API
-const steam_api = "9CEB780BCBAFCDD544E73E73EB2552C4"
+const steam_api = process.env.RAZZLE_STEAM_API
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var l = require('lyric-get')
 
 const urlsummonerid = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const urlgetleague = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
-const urlopendota = "https://api.opendota.com/api/"
+const urlstratzdota = "https://api.stratz.com/api/v1/"
+const url64steamid = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steam_api}&vanityurl=`
 
 client.on('ready', () => {
 	console.log("Connected as " + client.user.tag)
@@ -256,7 +258,63 @@ async function processCommand(recievedMessage) {
 
 	if(primaryCommand === "dota") {
 
+		
+		const canvas = Canvas.createCanvas(300,300)
+		// const canvas = Canvas.createCanvas(1000,412) // show 4 ranks
+		const ctx = canvas.getContext('2d')
 
+
+		const http = new XMLHttpRequest()
+		let steam64idurl = url64steamid + arguments[0]
+		http.open("GET", steam64idurl);
+		http.send();
+
+		http.onreadystatechange = async (e) => {
+			if (http.readyState == 4 && http.status == 200) {
+
+				let response = JSON.parse(http.responseText)
+
+				let bit32 = bignumber(response.response.steamid).minus('76561197960265728')
+
+				console.log(bit32.c[0])
+
+				const xhr = new XMLHttpRequest()
+				let playerurl = urlstratzdota + `/Player/${bit32.c[0]}`
+				xhr.open("GET", playerurl, false);
+				xhr.send(null);
+
+				let player = JSON.parse(xhr.responseText)
+				console.log(player)
+
+				var x = 60, y = 60;
+
+				ctx.textBaseline="middle";
+				ctx.textAlign="center";
+
+				imageRank = await Canvas.loadImage(`./images/dota/${player.steamAccount.seasonRank}.png`);
+				ctx.drawImage(imageRank, x, y, 170, 170);
+
+				// Use helpful Attachment class structure to process the file for you
+				const attachment = new Discord.Attachment(canvas.toBuffer(), 'lol-elo.png');
+
+				recievedMessage.channel.send(attachment);
+
+			
+				// const attachment = new Discord.Attachment(`./images/dota/${player.steamAccount.seasonRank}.png`, 'medal.png');
+				// recievedMessage.channel.send(new Discord.RichEmbed()
+				// .setTitle(player.steamAccount.name)
+				// .setColor('275BF0')
+				// .attachFile()
+				// .addField("Rank:", player.steamAccount.seasonRank))
+
+				
+			
+
+			} else if(http.readyState == 4 && http.status == 404){
+				recievedMessage.channel.send("O usuário não existe.")
+			}
+
+		}
 	
 	}
 
