@@ -150,10 +150,8 @@ function processCommand(recievedMessage) {
 				var filteredRank = [];
 				rankType.forEach(rank => {
 					filteredRank.push(
-						Object.assign({
-							'queueType': rank,
-							'tier': 'UNRANKED',
-							},
+						Object.assign(
+							{'queueType': rank, 'tier': 'UNRANKED'},
 							summonerRank.find((obj) => {
 								return obj.queueType == rank
 							})
