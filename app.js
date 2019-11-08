@@ -147,15 +147,14 @@ function processCommand(recievedMessage) {
 				const summonerRank = JSON.parse(xhr.responseText)
 				// console.log(summonerRank)
 
-				var filteredRank = [];
+				const filteredRank = [];
 				rankType.forEach(rank => {
 					filteredRank.push(
-						Object.assign(
-							{'queueType': rank, 'tier': 'UNRANKED'},
-							summonerRank.find((obj) => {
-								return obj.queueType == rank
-							})
-						)
+						{
+							'queueType': rank,
+							'tier': 'UNRANKED',
+							...summonerRank.find((obj) => obj.queueType == rank)
+						}
 					);
 				});
 
@@ -183,7 +182,7 @@ function processCommand(recievedMessage) {
 				ctx.textBaseline="middle";
 				ctx.textAlign="center";
 
-				for (let i = 0; i < filteredRank.length; i++) {
+				for (let i = 0; i < filteredRank.length;  x += 240, i++) {
 					const element = filteredRank[i];
 					
 					// Elo
@@ -217,7 +216,6 @@ function processCommand(recievedMessage) {
 						ctx.fillText(`${element.wins} VITÓRIA(S) ${element.leaguePoints} PDL`, x + 85, y + 250);
 					}
 					
-					x += 240;
 				}
 				
 				ctx.font = '14px sans-serif';
