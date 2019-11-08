@@ -154,9 +154,9 @@ function processCommand(recievedMessage) {
 							'queueType': rank,
 							'tier': 'UNRANKED',
 							},
-							summonerRank.filter((obj) => {
+							summonerRank.find((obj) => {
 								return obj.queueType == rank
-							})[0]
+							})
 						)
 					);
 				});
