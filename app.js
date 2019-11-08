@@ -47,7 +47,7 @@ client.on("guildMemberAdd", member => {
 
 })
 
-async function processCommand(recievedMessage) {
+function processCommand(recievedMessage) {
 
 	let fullCommand = recievedMessage.content.substr(1)
 	let splitCommand = fullCommand.split(" ")
@@ -116,7 +116,6 @@ async function processCommand(recievedMessage) {
 			}
 		}
 
-
 	}
 
 	if (primaryCommand === "lol") {
@@ -138,14 +137,14 @@ async function processCommand(recievedMessage) {
 		http.onreadystatechange = async (e) => {
 			if (http.readyState == 4 && http.status == 200) {
 
-				let summoner = JSON.parse(http.responseText)
+				const summoner = JSON.parse(http.responseText)
 
 				const xhr = new XMLHttpRequest()
 				const url2 = urlgetleague.concat(summoner.id, "?api_key=", lol_api)
 				xhr.open("GET", url2, false);
 				xhr.send(null);
 
-				let summonerRank = JSON.parse(xhr.responseText)
+				const summonerRank = JSON.parse(xhr.responseText)
 				// console.log(summonerRank)
 
 				var filteredRank = [];
@@ -162,9 +161,7 @@ async function processCommand(recievedMessage) {
 					);
 				});
 
-				// const profileURL = "http://br.op.gg/summoner/userName=".concat(arguments[0])
-
-				const background = await Canvas.loadImage('./images/background.jpg');
+				const background = await Canvas.loadImage('./images/lol/background.jpg');
 				ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
 				// Rectangle - opacity 70%
@@ -183,35 +180,28 @@ async function processCommand(recievedMessage) {
 				ctx.fillText("Nível: " + summoner.summonerLevel, 20, 60);
 
 				// Ranks
-				var imageRank;
-				var x = 60, y = 100;
+				let x = 60, y = 100;
 
 				ctx.textBaseline="middle";
 				ctx.textAlign="center";
 
-				// // Middle lines
-				// var grd = ctx.createLinearGradient(0, y + 85, canvas.width, y + 85);
-				// grd.addColorStop(0,"#000000");
-				// grd.addColorStop(0.5,"#60491f");
-				// grd.addColorStop(1,"#000000");
-				// ctx.fillStyle = grd;
-				// ctx.fillRect(0, y + 85, canvas.width, 3);
-				// ctx.fillRect(x, y + 105, canvas.width - x, 2);
-
 				for (let i = 0; i < filteredRank.length; i++) {
-
 					const element = filteredRank[i];
 					
 					// Elo
-					imageRank = await Canvas.loadImage(getElo(element.tier));
+					const imageRank = await Canvas.loadImage(getElo(element.tier));
 					ctx.drawImage(imageRank, x, y, 170, 170);
 					
 					ctx.font = '22px Verdana';
 					ctx.fillStyle = '#8c897d';
 					ctx.fillText(getRankName(element.queueType), x + 85, y + 195);
 
-					if (element.tier != 'UNRANKED') {
-
+					if (element.tier == "UNRANKED") {
+						ctx.font = '18px sans-serif';
+						ctx.fillStyle = '#8c897d';
+						ctx.fillText('Não Ranqueado', x + 85, y + 220);
+					}
+					else {
 						ctx.font = '18px sans-serif';
 						ctx.fillStyle = '#f0e6d2';
 						ctx.fillText(`${element.tier} ${element.rank}`, x + 85, y + 220);
@@ -228,13 +218,6 @@ async function processCommand(recievedMessage) {
 						ctx.fillStyle = '#8c897d';
 						ctx.fillText(`${element.wins} VITÓRIA(S) ${element.leaguePoints} PDL`, x + 85, y + 250);
 					}
-					else {
-
-						ctx.font = '18px sans-serif';
-						ctx.fillStyle = '#8c897d';
-						ctx.fillText('Não Ranqueado', x + 85, y + 220);
-
-					}
 					
 					x += 240;
 				}
@@ -243,7 +226,6 @@ async function processCommand(recievedMessage) {
 				ctx.fillStyle = '#f0e6d2';
 				ctx.fillText('@LeBot', canvas.width - 50, 30);
 
-				// Use helpful Attachment class structure to process the file for you
 				const attachment = new Discord.Attachment(canvas.toBuffer(), 'lol-elo.png');
 
 				recievedMessage.channel.send(attachment);
@@ -258,7 +240,6 @@ async function processCommand(recievedMessage) {
 
 	if(primaryCommand === "dota") {
 
-		
 		const canvas = Canvas.createCanvas(300,300)
 		// const canvas = Canvas.createCanvas(1000,412) // show 4 ranks
 		const ctx = canvas.getContext('2d')
@@ -321,7 +302,7 @@ async function processCommand(recievedMessage) {
 }
 
 function getElo(elo) {
-	return `./images/${elo}.png`;
+	return `./images/lol/${elo}.png`;
 }
 
 function getRankName(type) {
