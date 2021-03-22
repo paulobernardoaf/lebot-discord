@@ -329,6 +329,7 @@ function processCommand(receivedMessage) {
 }
 
 async function createMovieEmbed(genre, receivedMessage) {
+  console.log('creatingEmbed');
   getGenres().then((genres) => {
     const exists = genres.find(
       (g) => g.name.toLowerCase() === genre.toLowerCase()
