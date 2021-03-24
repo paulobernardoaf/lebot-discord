@@ -349,16 +349,16 @@ async function createMovieEmbed(genre, receivedMessage) {
         }
         const embed = new Discord.RichEmbed()
           .setColor("9927f0")
-          .setTitle(movie.title)
+          .setTitle(movie.title || "unavailable*)
           .setThumbnail(imdbData.poster)
-          .addField("Description", imdbData.plot || movie.overview)
+          .addField("Description", imdbData.plot || movie.overview || "unavailable)
           .addField(
             "Release Date",
-            imdbData.year || `${movie.release_date.split("-")[0]}*`,
+            imdbData.year || `${movie.release_date.split("-")[0]}*` || "unavailable,
             true
           )
           .addField("Length", imdbData.length || "Unavailable", true)
-          .addField("Rating", imdbData.rating || `${movie.vote_average}*`, true)
+          .addField("Rating", imdbData.rating || `${movie.vote_average}*` || "unavailable", true)
           .addField("IMDB Link", `https://www.imdb.com/title/${imdbData.id}`);
 
         receivedMessage.channel.send(embed).then((message) => {
